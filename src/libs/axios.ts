@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const defaultApiClient = axios.create({
+const apiClient = axios.create({
   baseURL: "http://localhost:8080", //todo move to env
 });
 
-defaultApiClient.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
     console.error("API error", error);
@@ -16,4 +16,4 @@ defaultApiClient.interceptors.response.use(
   }
 );
 
-export default defaultApiClient;
+export default apiClient;

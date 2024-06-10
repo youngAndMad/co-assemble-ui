@@ -1,51 +1,55 @@
 "use client";
+import SocialLogin from "@/components/ui/auth/SocialLogin";
 import "./login.css";
 import React, { useEffect, useRef } from "react";
 
-export default function Login() {
-  useEffect(() => {
-    const signupButton = document.getElementById(
-      "signup-button"
-    ) as HTMLButtonElement | null;
-    const loginButton = document.getElementById(
-      "login-button"
-    ) as HTMLButtonElement | null;
-    const userForms = document.getElementById(
-      "user_options-forms"
-    ) as HTMLElement | null;
+const registerButtonHandlers = () => {
+  const signupButton = document.getElementById(
+    "signup-button"
+  ) as HTMLButtonElement | null;
+  const loginButton = document.getElementById(
+    "login-button"
+  ) as HTMLButtonElement | null;
+  const userForms = document.getElementById(
+    "user_options-forms"
+  ) as HTMLElement | null;
 
-    const handleSignupButtonClick = () => {
-      if (userForms) {
-        userForms.classList.remove("bounceRight");
-        userForms.classList.add("bounceLeft");
-      }
-    };
+  const handleSignupButtonClick = () => {
+    if (userForms) {
+      userForms.classList.remove("bounceRight");
+      userForms.classList.add("bounceLeft");
+    }
+  };
 
-    const handleLoginButtonClick = () => {
-      if (userForms) {
-        userForms.classList.remove("bounceLeft");
-        userForms.classList.add("bounceRight");
-      }
-    };
+  const handleLoginButtonClick = () => {
+    if (userForms) {
+      userForms.classList.remove("bounceLeft");
+      userForms.classList.add("bounceRight");
+    }
+  };
 
+  if (signupButton) {
+    signupButton.addEventListener("click", handleSignupButtonClick);
+  }
+
+  if (loginButton) {
+    loginButton.addEventListener("click", handleLoginButtonClick);
+  }
+
+  // Cleanup event listeners on component unmount
+  return () => {
     if (signupButton) {
-      signupButton.addEventListener("click", handleSignupButtonClick);
+      signupButton.removeEventListener("click", handleSignupButtonClick);
     }
-
     if (loginButton) {
-      loginButton.addEventListener("click", handleLoginButtonClick);
+      loginButton.removeEventListener("click", handleLoginButtonClick);
     }
+  };
+};
 
-    // Cleanup event listeners on component unmount
-    return () => {
-      if (signupButton) {
-        signupButton.removeEventListener("click", handleSignupButtonClick);
-      }
-      if (loginButton) {
-        loginButton.removeEventListener("click", handleLoginButtonClick);
-      }
-    };
-  }, []);
+export default function Login() {
+  useEffect(registerButtonHandlers, []);
+
   return (
     <section className="user">
       <div className="user_options-container">
@@ -68,6 +72,7 @@ export default function Login() {
             <button className="user_registered-login" id="login-button">
               Login
             </button>
+            <SocialLogin />
           </div>
         </div>
 
