@@ -1,7 +1,9 @@
 "use client";
+import React, { useEffect } from "react";
 import SocialLogin from "@/components/ui/auth/SocialLogin";
 import "./login.css";
-import React, { useEffect, useRef } from "react";
+import LoginForm from "./LoginForm";
+import RegisterForm from "./RegistrationForm";
 
 const registerButtonHandlers = () => {
   const signupButton = document.getElementById(
@@ -77,78 +79,8 @@ export default function Login() {
         </div>
 
         <div className="user_options-forms" id="user_options-forms">
-          <div className="user_forms-login">
-            <h2 className="forms_title">Login</h2>
-            <form className="forms_form">
-              <fieldset className="forms_fieldset">
-                <div className="forms_field">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="forms_field-input"
-                    required
-                    autoFocus
-                  />
-                </div>
-                <div className="forms_field">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="forms_field-input"
-                    required
-                  />
-                </div>
-              </fieldset>
-              <div className="forms_buttons">
-                <button type="button" className="forms_buttons-forgot">
-                  Forgot password?
-                </button>
-                <input
-                  type="submit"
-                  value="Log In"
-                  className="forms_buttons-action"
-                />
-              </div>
-            </form>
-          </div>
-          <div className="user_forms-signup">
-            <h2 className="forms_title">Register</h2>
-            <form className="forms_form">
-              <fieldset className="forms_fieldset">
-                <div className="forms_field">
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="forms_field-input"
-                    required
-                  />
-                </div>
-                <div className="forms_field">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="forms_field-input"
-                    required
-                  />
-                </div>
-                <div className="forms_field">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="forms_field-input"
-                    required
-                  />
-                </div>
-              </fieldset>
-              <div className="forms_buttons">
-                <input
-                  type="submit"
-                  value="Register"
-                  className="forms_buttons-action"
-                />
-              </div>
-            </form>
-          </div>
+          <LoginForm />
+          <RegisterForm />
         </div>
       </div>
     </section>

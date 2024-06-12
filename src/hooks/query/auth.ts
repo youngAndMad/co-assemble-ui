@@ -1,20 +1,11 @@
 import apiClient from "@/libs/axios";
 import {
-  LoginData,
   MailVerificationData,
   PasswordResetData,
   RegisterData,
 } from "@/models/types/auth";
 import { useMutation } from "@tanstack/react-query";
 
-export const useLoginMutation = () => {
-  return useMutation<void, Error, LoginData>({
-    mutationFn: async (loginData: LoginData) => {
-      await apiClient.post("/api/v1/auth/register", loginData);
-    },
-    mutationKey: ["login"],
-  });
-};
 export const useRegisterMutation = () => {
   return useMutation<void, Error, RegisterData>({
     mutationFn: async (registerData: RegisterData) => {
