@@ -7,9 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import { LoginData } from "@/models/types/auth";
 import Spinner from "@/components/ui/Spinner";
 import User from "@/models/types/user";
-import cookie from "@/libs/cookie";
 
 import "./login.css";
+import useCookie from "@/hooks/useCookie";
 
 export default function LoginForm() {
   const {
@@ -17,6 +17,8 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginData>();
+
+  const cookie = useCookie();
 
   const loginMutation = useMutation<AxiosResponse<User, any>, Error, LoginData>(
     {

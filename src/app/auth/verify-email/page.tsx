@@ -1,9 +1,8 @@
-"use client";
+"use server";
 
 import apiClient from "@/libs/axios";
 import { sleep } from "@/libs/rxjs";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 type EmailVerificationData = {
   email: string;
@@ -35,11 +34,10 @@ const VerifyEmail = () => {
   }
 
   const verifyEmail = verifyEmailQuery({ email, token });
-  const router = useRouter();
 
   if (verifyEmail.isSuccess) {
     sleep(3000).then(async () => {
-      router.push("/some-main-page-shown-after-email-verification");
+      // router.push("/some-main-page-shown-after-email-verification");
     });
   }
 
