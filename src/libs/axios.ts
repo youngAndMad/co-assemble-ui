@@ -1,4 +1,5 @@
 import axios from "axios";
+import cookie from "./cookie";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080", //todo move to env
@@ -10,7 +11,7 @@ apiClient.interceptors.response.use(
     console.error("API error", error);
     if (error.status === 401) {
       //todo redirect to login
-      localStorage.removeItem("profile");
+      cookie.clearUser();
     }
     return Promise.reject(error);
   }

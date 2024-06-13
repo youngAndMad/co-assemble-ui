@@ -1,11 +1,15 @@
-import { LoginData } from "@/models/types/auth";
 import React from "react";
+import { AxiosResponse } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
-import "./login.css";
-import Spinner from "@/components/ui/Spinner";
-import { useMutation } from "@tanstack/react-query";
 import apiClient from "@/libs/axios";
-import { sleep } from "@/libs/rxjs";
+import { useMutation } from "@tanstack/react-query";
+
+import { LoginData } from "@/models/types/auth";
+import Spinner from "@/components/ui/Spinner";
+import User from "@/models/types/user";
+import cookie from "@/libs/cookie";
+
+import "./login.css";
 
 export default function LoginForm() {
   const {
@@ -14,13 +18,15 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<LoginData>();
 
-  const loginMutation = useMutation<void, Error, LoginData>({
-    mutationFn: async (loginData: LoginData) => {
-      await sleep(5000);
-      await apiClient.post("/api/v1/auth/login", loginData);
-    },
-    mutationKey: ["login"],
-  });
+  const loginMutation = useMutation<AxiosResponse<User, any>, Error, LoginData>(
+    {
+      mutationFn: async (loginData: LoginData) => {
+        return await apiClient.post<User>("/api/v1/auth/login", loginData);
+      },
+      mutationKey: ["login"],
+      onSuccess: (loginResponse) => cookie.setUser(loginResponse.data),
+    }
+  );
 
   const onSubmit: SubmitHandler<LoginData> = (data) => {
     loginMutation.mutate(data);
@@ -29,9 +35,7 @@ export default function LoginForm() {
   return (
     <>
       {loginMutation.isPending ? (
-        <div className="flex justify-center items-center h-screen">
-          <Spinner />
-        </div>
+        <Spinner />
       ) : (
         <div className="user_forms-login">
           <h2 className="forms_title">Login</h2>
