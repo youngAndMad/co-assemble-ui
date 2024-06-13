@@ -5,52 +5,10 @@ import "./login.css";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegistrationForm";
 
-const registerButtonHandlers = () => {
-  const signupButton = document.getElementById(
-    "signup-button"
-  ) as HTMLButtonElement | null;
-  const loginButton = document.getElementById(
-    "login-button"
-  ) as HTMLButtonElement | null;
+export default function Login() {
   const userForms = document.getElementById(
     "user_options-forms"
-  ) as HTMLElement | null;
-
-  const handleSignupButtonClick = () => {
-    if (userForms) {
-      userForms.classList.remove("bounceRight");
-      userForms.classList.add("bounceLeft");
-    }
-  };
-
-  const handleLoginButtonClick = () => {
-    if (userForms) {
-      userForms.classList.remove("bounceLeft");
-      userForms.classList.add("bounceRight");
-    }
-  };
-
-  if (signupButton) {
-    signupButton.addEventListener("click", handleSignupButtonClick);
-  }
-
-  if (loginButton) {
-    loginButton.addEventListener("click", handleLoginButtonClick);
-  }
-
-  // Cleanup event listeners on component unmount
-  return () => {
-    if (signupButton) {
-      signupButton.removeEventListener("click", handleSignupButtonClick);
-    }
-    if (loginButton) {
-      loginButton.removeEventListener("click", handleLoginButtonClick);
-    }
-  };
-};
-
-export default function Login() {
-  useEffect(registerButtonHandlers, []);
+  ) as HTMLElement;
 
   return (
     <section className="user">
@@ -61,7 +19,14 @@ export default function Login() {
             <p className="user_unregistered-text">
               This is a Task Performance in WebSys (midterms) by Crissa Aguilos.
             </p>
-            <button className="user_unregistered-signup" id="signup-button">
+            <button
+              className="user_unregistered-signup"
+              id="signup-button"
+              onClick={() => {
+                userForms.classList.remove("bounceRight");
+                userForms.classList.add("bounceLeft");
+              }}
+            >
               Register
             </button>
           </div>
@@ -71,7 +36,14 @@ export default function Login() {
             <p className="user_registered-text">
               This is a Task Performance in WebSys (midterms) by Crissa Aguilos.
             </p>
-            <button className="user_registered-login" id="login-button">
+            <button
+              className="user_registered-login"
+              id="login-button"
+              onClick={() => {
+                userForms.classList.remove("bounceLeft");
+                userForms.classList.add("bounceRight");
+              }}
+            >
               Login
             </button>
             <SocialLogin />

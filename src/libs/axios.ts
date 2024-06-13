@@ -1,9 +1,11 @@
+import useCookie from "@/hooks/useCookie";
 import axios from "axios";
-import cookie from "./cookie";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080", //todo move to env
 });
+
+const cookie = useCookie();
 
 apiClient.interceptors.response.use(
   (response) => response.data,
