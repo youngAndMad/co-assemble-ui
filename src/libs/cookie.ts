@@ -1,14 +1,15 @@
 import User from "@/models/types/user";
 import { cookies } from "next/headers";
+import { decrypt, encrypt } from "./encryption";
 
 type CookieName = "currentUser" | "someCookieName"; // Define the cookie names here
 
 const setCookie = (key: CookieName, value: any) =>
-  cookies().set(key, JSON.stringify(value));
+  cookies().set(key, encrypt(JSON.stringify(value)));
 
 function getCookie<T>(key: CookieName): T | null {
   const cookie = cookies().get(key);
-  return cookie ? (JSON.parse(cookie.value) as T) : null;
+  return cookie ? (decrypt(JSON.parse(cookie.value)) as T) : null;
 }
 
 const removeCookie = (key: CookieName) => cookies().delete(key);
