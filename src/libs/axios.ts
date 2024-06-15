@@ -1,11 +1,8 @@
-import useCookie from "@/hooks/useCookie";
 import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:8080", //todo move to env
 });
-
-const cookie = useCookie();
 
 apiClient.interceptors.response.use(
   (response) => response.data,
@@ -13,7 +10,7 @@ apiClient.interceptors.response.use(
     console.error("API error", error);
     if (error.status === 401) {
       //todo redirect to login
-      cookie.clearUser();
+      // cookie.clearUser();
     }
     return Promise.reject(error);
   }

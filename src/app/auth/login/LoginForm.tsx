@@ -9,7 +9,7 @@ import Spinner from "@/components/ui/Spinner";
 import User from "@/models/types/user";
 
 import "./login.css";
-import useCookie from "@/hooks/useCookie";
+import { useCookies } from "react-cookie";
 
 export default function LoginForm() {
   const {
@@ -18,7 +18,7 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<LoginData>();
 
-  const cookie = useCookie();
+  const [cookies, setCookie] = useCookies();
 
   const loginMutation = useMutation<AxiosResponse<User, any>, Error, LoginData>(
     {
@@ -26,7 +26,8 @@ export default function LoginForm() {
         return await apiClient.post<User>("/api/v1/auth/login", loginData);
       },
       mutationKey: ["login"],
-      onSuccess: (loginResponse) => cookie.setUser(loginResponse.data),
+      onSuccess: (loginResponse) =>
+        setCookie("user", loginResponse.data, { path: "/" }),
     }
   );
 

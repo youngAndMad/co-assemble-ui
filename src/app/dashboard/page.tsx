@@ -1,11 +1,11 @@
-import { SecurityRole } from "@/models/types/user";
+import User, { SecurityRole } from "@/models/types/user";
 import AdminDashboard from "./AdminDashboard";
 import UserDashboard from "./UserDashboard";
-import useCookie from "@/hooks/useCookie";
+import { useCookies } from "react-cookie";
 
 export default async function Dashboard() {
-  const cookie = useCookie();
-  const user = cookie.user();
+  const [cookies] = useCookies(["user"]);
+  const user = cookies.user as User | undefined;
   console.log("🚀 ~ Dashboard ~ user:", user);
 
   return (

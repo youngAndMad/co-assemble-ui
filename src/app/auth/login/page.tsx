@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import SocialLogin from "@/components/ui/auth/SocialLogin";
 import "./login.css";
 import LoginForm from "./LoginForm";

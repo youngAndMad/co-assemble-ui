@@ -17,3 +17,7 @@ export type MailVerificationData = {
 export type PasswordResetData = {
   email: string;
 };
+
+export type ForgotPasswordData = {
+  email: string;
+};
