@@ -1,4 +1,4 @@
-"use server";
+"use client";
 
 import apiClient from "@/libs/axios";
 import { sleep } from "@/libs/rxjs";
@@ -10,9 +10,9 @@ type EmailVerificationData = {
 };
 
 const extractQueryParams = (): EmailVerificationData => {
-  const params = new URLSearchParams(window.location.search);
-  console.log(params);
-  return { email: params.get("email")!, token: params.get("token")! };
+  // const params = new URLSearchParams(window.location.search);
+  // console.log(params);
+  return { email: "params.get(email)!", token: "params.get(token)!" };
 };
 
 const verifyEmailQuery = ({ email, token }: EmailVerificationData) => {

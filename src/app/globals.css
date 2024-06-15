@@ -31,3 +31,17 @@ body {
     text-wrap: balance;
   }
 }
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background: linear-gradient(to right, #ece9e6, #ffffff);
+  align-items: center;
+  justify-content: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+

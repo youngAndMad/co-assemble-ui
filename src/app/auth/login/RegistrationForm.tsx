@@ -6,6 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
+import LoginBackground from "./LoginBackground";
+import Link from "next/link";
 
 export default function RegistrationForm() {
   const {
@@ -36,61 +38,36 @@ export default function RegistrationForm() {
   return registrationMutation.isPending ? (
     <Spinner />
   ) : (
-    <div className="user_forms-signup">
-      <h2 className="forms_title">Register</h2>
-      <form className="forms_form" onSubmit={handleSubmit(onSubmit)}>
-        <fieldset className="forms_fieldset">
-          <div className="forms_field">
-            <input
-              type="text"
-              placeholder="Username"
-              className="forms_field-input"
-              {...register("username", { required: "Username is required" })}
-            />
-            {errors.username && <p>{errors.username.message}</p>}
-          </div>
-          <div className="forms_field">
-            <input
-              type="email"
-              placeholder="Email"
-              className="forms_field-input"
-              {...register("email", { required: "Email is required" })}
-            />
-            {errors.email && <p>{errors.email.message}</p>}
-          </div>
-          <div className="forms_field">
-            <input
-              type="password"
-              placeholder="Password"
-              className="forms_field-input"
-              {...register("password", { required: "Password is required" })}
-            />
-            {errors.password && <p>{errors.password.message}</p>}
-          </div>
-        </fieldset>
-        <div className="forms_buttons">
-          <input
-            type="submit"
-            value="Register"
-            className="forms_buttons-action"
-          />
-        </div>
-      </form>
-      {successfullyRegistered && (
-        <Modal
-          title="Thanks for registration"
-          body={
-            <div>
-              <h2>Registration Successfully completed</h2>
-              <p>
-                Thank you for registering. Please check your email to verify
-                your account.
-              </p>
-            </div>
-          }
-          displayButtons={false}
+    <div className="relative flex items-center justify-center h-screen bg-gradient-to-r from-gray-200 to-white">
+      <LoginBackground />
+      <div className="relative z-10 max-w-md w-full p-8 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Sign Up to Co-assemble
+        </h2>
+        <input
+          type="email"
+          placeholder="E-mail"
+          className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-      )}
+        <input
+          type="text"
+          placeholder="Username"
+          className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full px-4 py-2 mb-6 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button className="w-full py-2 mb-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+          SIGN UP
+        </button>
+        <Link href="/">
+          <span className="block text-center text-blue-500 hover:underline">
+            Already have an account? Sign In
+          </span>
+        </Link>
+      </div>
     </div>
   );
 }
