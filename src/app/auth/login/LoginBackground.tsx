@@ -1,39 +1,23 @@
 import React from 'react';
 
-export default function LoginBackground(
-    {children}: { children: React.ReactNode }
-) {
+export default function LoginBackground({children}: { children: React.ReactNode }) {
     return (
-        <div className="relative flex justify-center items-center" style={{
-            backgroundColor: '#f9fafc',
-            height: '100vh',
-        }}>
-            <img
-                src="/images/login-background.svg"
-                alt="Login background image"
-                className="absolute w-full h-full object-cover top-0 left-0"
-            />
-            <div className="flex" style={{
-                borderRadius: '10px',
-                padding: '20px',
-                zIndex: 1
-            }}>
-                <div className="left">
-                    <div style={{marginRight: '50px'}}>
-                        <h1 style={{fontSize: '36px', fontWeight: 'bold', color: '#333'}}>Co-assemble</h1>
-                        <h3 style={{fontSize: '24px', color: '#666'}}>WELCOME!</h3>
-                        <p style={{fontSize: '18px', color: '#666'}}>
-                            Co-assemble is an app that will connect people all over the world.
-                        </p>
-                    </div>
+        <div className="flex flex-col md:flex-row justify-center items-center h-screen bg-cover bg-center relative"
+             style={{backgroundImage: 'url(/images/login-background.svg)'}}
+        >
+            <div className="absolute top-2 left-5 p-2 md:top-5 md:left-10">
+                <h2 className="text-2xl font-bold text-gray-800">Co-assemble</h2>
+            </div>
+            <div className="flex-1 flex flex-col justify-center items-start p-6 text-gray-800 md:items-center md:pl-24">
+                <div className="max-w-md text-left md:text-center">
+                    <h3 className="text-3xl md:text-4xl font-semibold mb-4">Hello, WELCOME!</h3>
+                    <p className="text-lg md:text-xl">
+                        Co-assemble is an app that will connect people all over the world.
+                    </p>
                 </div>
-
-                <div style={{
-                    boxShadow: "3px 3px 30px -4px rgba(97,78,97,1)",
-                    backgroundColor: '#ffffff',
-                    borderRadius: '15px',
-                    padding: '40px 25px 25px 25px',
-                }}>
+            </div>
+            <div className="flex-1 flex justify-center items-center p-6">
+                <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
                     {children}
                 </div>
             </div>

@@ -1,5 +1,3 @@
-import Modal from "@/components/ui/Modal";
-import Spinner from "@/components/ui/Spinner";
 import apiClient from "@/libs/axios";
 import { RegisterData } from "@/models/types/auth";
 import { useMutation } from "@tanstack/react-query";
@@ -36,10 +34,9 @@ export default function RegistrationForm() {
     registrationMutation.mutate(data);
 
   return registrationMutation.isPending ? (
-    <Spinner />
+      <>todo</>
   ) : (
     <div className="relative flex items-center justify-center h-screen bg-gradient-to-r from-gray-200 to-white">
-      <LoginBackground />
       <div className="relative z-10 max-w-md w-full p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
           Sign Up to Co-assemble
