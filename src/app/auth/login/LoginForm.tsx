@@ -9,7 +9,14 @@ export default function LoginForm() {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <h2 style={{marginBottom: '20px'}}>Sign in to Co-assemble</h2>
+            <div style={{
+                textAlign: 'left',
+            }}>
+                <h2 style={{
+                    marginBottom: '20px',
+                }}>Sign in to Co-assemble</h2>
+            </div>
+
             <form style={{width: '300px', display: 'flex', flexDirection: 'column'}}>
                 <label style={{marginBottom: '10px'}}>
                     E-mail

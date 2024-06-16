@@ -28,8 +28,11 @@ export default function LoginBackground(
                     </div>
                 </div>
 
-                <div className="right" style={{
-                    boxShadow: "3px 3px 30px -4px rgba(97,78,97,1);"
+                <div style={{
+                    boxShadow: "3px 3px 30px -4px rgba(97,78,97,1)",
+                    backgroundColor: '#ffffff',
+                    borderRadius: '15px',
+                    padding: '40px 25px 25px 25px',
                 }}>
                     {children}
                 </div>
