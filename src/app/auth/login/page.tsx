@@ -1,10 +1,10 @@
 "use client";
 import "./Login.css";
 import React from "react";
-import LoginForm from "./LoginForm";
+import LoginBackground from "@/app/auth/login/LoginBackground";
 
 export default function Login() {
     return (
-        <LoginForm/>
+        <LoginBackground/>
     );
 }
