@@ -1,19 +1,38 @@
 import React from 'react';
 
-export default function LoginBackground() {
+export default function LoginBackground(
+    {children}: { children: React.ReactNode }
+) {
     return (
-        <div style={{backgroundColor: '#f9fafc', position: 'relative'}}>
+        <div className="relative flex justify-center items-center" style={{
+            backgroundColor: '#f9fafc',
+            height: '100vh',
+        }}>
             <img
-                src="/images/login-background.jpg"
+                src="/images/login-background.svg"
                 alt="Login background image"
-                style={{width: '100%', height: 'auto', objectFit: 'cover'}}
+                className="absolute w-full h-full object-cover top-0 left-0"
             />
-            <div className="">
-                <h1>Co-assemble</h1>
-            </div>
-            <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-                <h3>WELCOME!</h3>
-                <p>Co-assemble is an app that will connect people all over the world.</p>
+            <div className="flex" style={{
+                borderRadius: '10px',
+                padding: '20px',
+                zIndex: 1
+            }}>
+                <div className="left">
+                    <div style={{marginRight: '50px'}}>
+                        <h1 style={{fontSize: '36px', fontWeight: 'bold', color: '#333'}}>Co-assemble</h1>
+                        <h3 style={{fontSize: '24px', color: '#666'}}>WELCOME!</h3>
+                        <p style={{fontSize: '18px', color: '#666'}}>
+                            Co-assemble is an app that will connect people all over the world.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="right" style={{
+                    boxShadow: "3px 3px 30px -4px rgba(97,78,97,1);"
+                }}>
+                    {children}
+                </div>
             </div>
         </div>
     );

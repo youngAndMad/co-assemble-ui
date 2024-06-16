@@ -1,12 +1,3 @@
-// import {
-//   Modal as NextUIModal,
-//   ModalBody,
-//   useDisclosure,
-//   ModalContent,
-//   ModalHeader,
-//   ModalFooter,
-//   Button,
-// } from "@nextui-org/react";
 import React from "react";
 
 type ModalSize =
