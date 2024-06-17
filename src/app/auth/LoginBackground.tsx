@@ -3,7 +3,7 @@ import React from 'react';
 export default function LoginBackground({children}: { children: React.ReactNode }) {
     return (
         <div className="flex flex-col md:flex-row justify-center items-center h-screen bg-cover bg-center relative"
-             style={{backgroundImage: 'url(/images/sign-in-background.svg)'}}
+             style={{backgroundImage: 'url(/images/login-background.svg)'}}
         >
             <div className="absolute top-2 left-5 p-2 md:top-5 md:left-10">
                 <h2 className="text-2xl font-bold text-gray-800">Co-assemble</h2>
