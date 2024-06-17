@@ -21,3 +21,7 @@ export type PasswordResetData = {
 export type ForgotPasswordData = {
   email: string;
 };
+
+export type ResendEmailData = {
+  email: string;
+};

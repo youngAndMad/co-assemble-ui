@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080", //todo move to env
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 apiClient.interceptors.response.use(
@@ -9,7 +9,7 @@ apiClient.interceptors.response.use(
   (error) => {
     console.error("API error", error);
     if (error.status === 401) {
-      //todo redirect to sign-in
+      //todo redirect to sign-in`
       // cookie.clearUser();
     }
     return Promise.reject(error);

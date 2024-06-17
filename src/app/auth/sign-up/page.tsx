@@ -1,70 +1,244 @@
-"use client"
-import apiClient from "@/libs/axios";
-import { RegisterData } from "@/models/types/auth";
-import { useMutation } from "@tanstack/react-query";
+"use client";
+
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { toast } from "react-toastify";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { RegisterData, ResendEmailData } from "@/models/types/auth";
+import { useMutation } from "@tanstack/react-query";
+import apiClient from "@/libs/axios";
+import User from "@/models/types/user";
+import { AxiosResponse } from "axios";
+import { emailRegex } from "@/libs/utils";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  Link,
+  Snackbar,
+  TextField,
+} from "@mui/material";
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
+import { ProblemDetail } from "@/models/types/api";
+import EmailConfirmationModal from "@/app/auth/sign-up/EmailConfirmationModal";
 
 export default function SignUp() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<RegisterData>();
+  const router = useRouter();
 
-    const [successfullyRegistered, setSuccessfullyRegistered] =
-        useState<boolean>(false);
+  const handleLoginWithGitHub = () =>
+    router.push("/oauth2/authorization/github"); // todo move to env
 
-    const registrationMutation = useMutation<void, Error, RegisterData>({
-        mutationFn: async (registerData: RegisterData) => {
-            await apiClient.post("/api/v1/auth/register", registerData);
-        },
-        mutationKey: ["register"],
-        onError: (error) => {
-            toast.error(error.message);
-        },
-        onSuccess: () => {
-            setSuccessfullyRegistered(true);
-        },
-    });
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<RegisterData>({
+    defaultValues: {
+      email: "someemail@gmail.com", //todo remove
+      password: "",
+      username: "",
+    },
+  });
 
-    const onSubmit: SubmitHandler<RegisterData> = (data) =>
-        registrationMutation.mutate(data);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(true); // todo true => false
 
-    return registrationMutation.isPending ? (
-        <>todo</>
-    ) : (
-        <div className="relative flex items-center justify-center h-screen bg-gradient-to-r from-gray-200 to-white">
-            <div className="relative z-10 max-w-md w-full p-8 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-6 text-center">
-                    Sign Up to Co-assemble
-                </h2>
-                <input
-                    type="email"
-                    placeholder="E-mail"
-                    className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    placeholder="Username"
-                    className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full px-4 py-2 mb-6 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button className="w-full py-2 mb-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                    SIGN UP
-                </button>
-                <Link href="/">
-          <span className="block text-center text-blue-500 hover:underline">
-            Already have an account? Sign In
-          </span>
-                </Link>
-            </div>
-        </div>
-    );
+  const [signUpError, setSignUpError] = useState<ProblemDetail | null>(null);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+  const signUpMutation = useMutation<
+    AxiosResponse<unknown>,
+    ProblemDetail,
+    RegisterData
+  >({
+    mutationKey: ["sign-up"],
+    mutationFn: async (registerData) =>
+      apiClient.post<User>("/api/v1/auth/register", registerData),
+    onError: (error) => {
+      setSignUpError(error);
+    },
+    onSuccess: () => {
+      setModalOpen(true);
+    },
+  });
+
+  const resendEmailMutatuion = useMutation<
+    AxiosResponse<User>,
+    ProblemDetail,
+    ResendEmailData
+  >({
+    mutationKey: ["resend-email", getValues("email")],
+    mutationFn: async (resendEmailData) =>
+      apiClient.post<User>("/api/v1/auth/resend-email", resendEmailData),
+  });
+
+  const handleSignUp = async (data: RegisterData) => {
+    signUpMutation.mutate(data);
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <div>
+        <p className="mb-5 text-left self-start">Sign up to Co-assemble</p>
+        <form
+          className="w-80 flex flex-col"
+          onSubmit={handleSubmit(handleSignUp)}
+        >
+          <TextField
+            label="Username"
+            type="text"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            autoComplete="current-email"
+            error={!!errors.username}
+            helperText={errors.email ? "Username is required" : ""}
+            {...register("username", {
+              required: "Email is required",
+            })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FaUser />
+                </InputAdornment>
+              ),
+              style: {
+                borderRadius: "27px",
+              },
+            }}
+          />
+          <TextField
+            label="E-mail"
+            type="email"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            autoComplete="current-email"
+            error={!!errors.email}
+            helperText={
+              errors.email ? "Please enter a valid email address" : ""
+            }
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: emailRegex,
+                message: "Please enter a valid email address",
+              },
+            })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FaEnvelope />
+                </InputAdornment>
+              ),
+              style: {
+                borderRadius: "27px",
+              },
+            }}
+          />
+          <TextField
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            error={!!errors.password}
+            helperText={
+              errors.password
+                ? "Password must be at least 6 characters long"
+                : ""
+            }
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters long",
+              },
+            })}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FaLock />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility}>
+                    {!!errors.password ? (
+                      <></>
+                    ) : showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+              style: {
+                borderRadius: "27px",
+              },
+            }}
+          />
+          <div className="flex justify-center">
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                backgroundColor: "#8B8CBAFC",
+                borderRadius: "27px",
+                width: "50%",
+                paddingTop: "10px",
+              }}
+              disabled={signUpMutation.isPending}
+            >
+              SIGN IN
+            </Button>
+          </div>
+          <p className="mt-5 p-0 text-center">or</p>
+          <Button
+            className="mt-5"
+            onClick={handleLoginWithGitHub}
+            style={{
+              borderRadius: "27px",
+              boxShadow: "0px 4px 4px #5B4F4F36",
+              border: "1px solid #FFFFFF",
+              font: `Kumbh Sans`,
+              fontWeight: 400,
+              color: `#00000099`,
+              fontSize: `18px`,
+              lineHeight: `22px`,
+              textAlign: `left`,
+            }}
+            disabled={signUpMutation.isPending}
+          >
+            Sign in with GitHub
+          </Button>
+        </form>
+        <p className="mt-5">
+          New here?
+          <Link
+            onClick={(e) => signUpMutation.isPending && e.preventDefault()}
+            href="/auth/sign-up"
+            className="text-blue-600"
+            style={{
+              cursor: signUpMutation.isPending ? "not-allowed" : "pointer",
+            }}
+          >
+            Sign Up!
+          </Link>
+        </p>
+      </div>
+      <Snackbar
+        open={!!signUpError}
+        message={signUpError?.message}
+        key={signUpError?.detail}
+      />
+      <EmailConfirmationModal
+        email={getValues("email")}
+        open={modalOpen}
+        handleClose={() => setModalOpen(false)}
+        handleResendEmail={() => console.log("resend email")}
+      />
+    </div>
+  );
 }

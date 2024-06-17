@@ -13,7 +13,7 @@ import {Button, IconButton, InputAdornment, Link, Snackbar, TextField} from '@mu
 import {FaEnvelope, FaEye, FaEyeSlash, FaLock} from 'react-icons/fa';
 import {ProblemDetail} from "@/models/types/api";
 
-export default function Login() {
+export default function SignIn() {
     const router = useRouter();
 
     const handleLoginWithGitHub = () => router.push('/oauth2/authorization/github'); // todo move to env
