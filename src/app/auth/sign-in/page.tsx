@@ -9,8 +9,9 @@ import apiClient from '@/libs/axios';
 import User from '@/models/types/user';
 import {AxiosResponse} from 'axios';
 import {emailRegex} from '@/libs/utils';
-import {Button, IconButton, InputAdornment, Link, TextField} from '@mui/material';
+import {Button, IconButton, InputAdornment, Link, Snackbar, TextField} from '@mui/material';
 import {FaEnvelope, FaEye, FaEyeSlash, FaLock} from 'react-icons/fa';
+import {ProblemDetail} from "@/models/types/api";
 
 export default function Login() {
     const router = useRouter();
@@ -29,15 +30,22 @@ export default function Login() {
     });
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [signInError, setSignInError] = useState<ProblemDetail | null>(null);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-    const loginMutation = useMutation<AxiosResponse<User>, Error, LoginData>({
+    const loginMutation = useMutation<AxiosResponse<User>, ProblemDetail, LoginData>({
         mutationKey: ['sign-in'],
-        mutationFn: async (loginData) => apiClient.post<User>('/api/v1/auth/login', loginData),
+        mutationFn: async (loginData) =>
+            apiClient.post<User>('/api/v1/auth/login', loginData),
+        onError: (error) => {
+            setSignInError(error);
+        },
+        onSuccess: () => {
+            router.push('/dashboard');
+        }
     });
 
     const handleLogin = async (data: LoginData) => {
-        console.log(data);
         loginMutation.mutate(data);
     };
 
@@ -103,7 +111,12 @@ export default function Login() {
                             },
                         }}
                     />
-                    <Link href="#" className="mb-5 text-blue-600">
+                    <Link href="/auth/forgot-password" className="mb-5 text-blue-600"
+                          style={{
+                              cursor: loginMutation.isPending ? 'not-allowed' : 'pointer'
+                          }}
+                          onClick={(e) => loginMutation.isPending && e.preventDefault()}
+                    >
                         Forgot password?
                     </Link>
                     <div className="flex justify-center">
@@ -115,6 +128,7 @@ export default function Login() {
                                 borderRadius: '27px',
                                 width: '50%',
                             }}
+                            disabled={loginMutation.isPending}
                         >
                             SIGN IN
                         </Button>
@@ -134,14 +148,29 @@ export default function Login() {
                             lineHeight: `22px`,
                             textAlign: `left`,
                         }}
+                        disabled={loginMutation.isPending}
                     >
                         Sign in with GitHub
                     </Button>
                 </form>
                 <p className="mt-5">
-                    New here? <Link href="#" className="text-blue-600">Sign Up!</Link>
+                    New here?
+                    <Link
+                        onClick={(e) => loginMutation.isPending && e.preventDefault()}
+                        href="/auth/sign-up" className="text-blue-600"
+                        style={{
+                            cursor: loginMutation.isPending ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        Sign Up!
+                    </Link>
                 </p>
             </div>
+            <Snackbar
+                open={!!signInError}
+                message={signInError?.message}
+                key={signInError?.detail}
+            />
         </div>
     );
 }

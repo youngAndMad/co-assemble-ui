@@ -1,10 +1,10 @@
 import React from 'react'
-import LoginBackground from "@/app/auth/LoginBackground";
+import AuthBackground from "@/app/auth/AuthBackground";
 
 export default function Layout({children}: { children: React.ReactNode }) {
     return (
-        <LoginBackground>
+        <AuthBackground>
             {children}
-        </LoginBackground>
+        </AuthBackground>
     )
 }

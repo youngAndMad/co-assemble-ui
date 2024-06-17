@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function LoginBackground({children}: { children: React.ReactNode }) {
+export default function AuthBackground({children}: { children: React.ReactNode }) {
     return (
         <div className="flex flex-col md:flex-row justify-center items-center h-screen bg-cover bg-center relative"
              style={{backgroundImage: 'url(/images/login-background.svg)'}}
