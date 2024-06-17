@@ -15,8 +15,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: docker login
-        run: echo $DOCKER_PASSWORD | docker login --username daneker --password-stdin
+      - name: docker sign-in
+        run: echo $DOCKER_PASSWORD | docker sign-in --username daneker --password-stdin
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker image

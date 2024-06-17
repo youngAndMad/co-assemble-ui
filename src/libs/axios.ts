@@ -9,7 +9,7 @@ apiClient.interceptors.response.use(
   (error) => {
     console.error("API error", error);
     if (error.status === 401) {
-      //todo redirect to login
+      //todo redirect to sign-in
       // cookie.clearUser();
     }
     return Promise.reject(error);
