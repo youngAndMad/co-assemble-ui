@@ -1,19 +1,21 @@
 import React from "react";
 import { Box, Button, Divider, Modal, Typography } from "@mui/material";
 
-type EmailConfirmationModalProps = {
+type EmailModalProps = {
+  title: string;
   email: string;
   open: boolean;
   handleClose: () => void;
   handleResendEmail: () => void;
 };
 
-export default function EmailConfirmationModal({
+export default function EmailModal({
+  title,
   email,
   open,
   handleClose,
   handleResendEmail,
-}: EmailConfirmationModalProps) {
+}: EmailModalProps) {
   return (
     <Modal
       open={open}
@@ -56,7 +58,7 @@ export default function EmailConfirmationModal({
             fontStyle: "normal",
           }}
         >
-          Email Confirmation
+          {title}
         </Typography>
         <Typography
           id="email-confirmation-description"

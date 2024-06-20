@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
 import { ProblemDetail } from "@/models/types/api";
-import EmailConfirmationModal from "@/app/auth/sign-up/EmailConfirmationModal";
+import EmailModal from "../EmailModal";
 
 export default function SignUp() {
   const router = useRouter();
@@ -34,14 +34,14 @@ export default function SignUp() {
     formState: { errors },
   } = useForm<RegisterData>({
     defaultValues: {
-      email: "someemail@gmail.com", //todo remove
+      email: "", //todo remove
       password: "",
       username: "",
     },
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(true); // todo true => false
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const [signUpError, setSignUpError] = useState<ProblemDetail | null>(null);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -62,14 +62,14 @@ export default function SignUp() {
     },
   });
 
-  const resendEmailMutatuion = useMutation<
+  const resendEmailMutation = useMutation<
     AxiosResponse<User>,
     ProblemDetail,
     ResendEmailData
   >({
     mutationKey: ["resend-email", getValues("email")],
-    mutationFn: async (resendEmailData) =>
-      apiClient.post<User>("/api/v1/auth/resend-email", resendEmailData),
+    mutationFn: async ({ email, option }) =>
+      apiClient.post<User>(`/api/v1/auth/resend-email/${email}?type=${option}`),
   });
 
   const handleSignUp = async (data: RegisterData) => {
@@ -215,16 +215,16 @@ export default function SignUp() {
           </Button>
         </form>
         <p className="mt-5">
-          New here?
+          Already have an account?{" "}
           <Link
             onClick={(e) => signUpMutation.isPending && e.preventDefault()}
-            href="/auth/sign-up"
+            href="/auth/sign-in"
             className="text-blue-600"
             style={{
               cursor: signUpMutation.isPending ? "not-allowed" : "pointer",
             }}
           >
-            Sign Up!
+            Sign In!
           </Link>
         </p>
       </div>
@@ -233,11 +233,17 @@ export default function SignUp() {
         message={signUpError?.message}
         key={signUpError?.detail}
       />
-      <EmailConfirmationModal
+      <EmailModal
+        title="Email Confirmation"
         email={getValues("email")}
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
-        handleResendEmail={() => console.log("resend email")}
+        handleResendEmail={() =>
+          resendEmailMutation.mutate({
+            email: getValues("email"),
+            option: "MAIL_VERIFICATION",
+          })
+        }
       />
     </div>
   );

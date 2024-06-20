@@ -24,4 +24,9 @@ export type ForgotPasswordData = {
 
 export type ResendEmailData = {
   email: string;
+  option:
+    | "MAIL_VERIFICATION"
+    | "PASSWORD_RESET"
+    | "TWO_FACTOR_AUTHENTICATION"
+    | "FORGOT_PASSWORD";
 };
