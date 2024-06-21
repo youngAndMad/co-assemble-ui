@@ -136,7 +136,7 @@ export default function SignIn() {
             }}
           />
           <Link
-            href="/auth/forgot-password"
+            href="/auth/forgot-password/request"
             className="mb-5 text-blue-600"
             style={{
               cursor: loginMutation.isPending ? "not-allowed" : "pointer",
