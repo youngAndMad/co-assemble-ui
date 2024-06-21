@@ -1,59 +1,57 @@
 "use client";
 
-import apiClient from "@/libs/axios";
-import { sleep } from "@/libs/rxjs";
+import { Suspense, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import apiClient from "@/libs/axios";
+import { ProblemDetail } from "@/models/types/api";
+import { useRouter, useSearchParams } from "next/navigation";
 
-type EmailVerificationData = {
-  email: string;
-  token: string;
-};
+export default function VerifyEmail() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const token = searchParams.get("token");
+  const router = useRouter();
 
-const extractQueryParams = (): EmailVerificationData => {
-  // const params = new URLSearchParams(window.location.search);
-  // console.log(params);
-  return { email: "params.get(email)!", token: "params.get(token)!" };
-};
+  const shouldFetch = email && token;
 
-const verifyEmailQuery = ({ email, token }: EmailVerificationData) => {
-  return useQuery({
-    queryKey: ["verify-email", { email, token }],
+  const verifyEmailQuery = useQuery<unknown, ProblemDetail>({
+    queryKey: shouldFetch ? ["verify-email", { email, token }] : [],
     queryFn: async () => {
-      apiClient.get(`/api/v1/auth/verify-email`, {
+      const response = await apiClient.get("/api/v1/auth/verify-email", {
         params: { email, token },
       });
+      return response.data || {};
     },
-    refetchOnReconnect: true,
+    enabled: false,
+    refetchOnWindowFocus: false,
   });
-};
 
-const VerifyEmail = () => {
-  const { email, token } = extractQueryParams();
-  if (!email || !token) {
-    return <h1>Invalid URL</h1>;
-  }
+  useEffect(() => {
+    if (verifyEmailQuery.isSuccess) {
+      const timeout = setTimeout(() => router.push("/dashboard"), 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [verifyEmailQuery.isSuccess, router]);
 
-  const verifyEmail = verifyEmailQuery({ email, token });
+  useEffect(() => {
+    if (shouldFetch) {
+      verifyEmailQuery.refetch();
+    }
+  }, [email, token]);
 
-  if (verifyEmail.isSuccess) {
-    sleep(3000).then(async () => {
-      // router.push("/some-main-page-shown-after-email-verification");
-    });
-  }
-
-  return (
-    <>
-      {verifyEmail.isPending ? (
-        <h1>Verifying...</h1>
-      ) : verifyEmail.isError ? (
-        <>{verifyEmail.error.message}</>
-      ) : (
-        <div>
-          <h1>Email verified</h1>
-        </div>
-      )}
-    </>
+  return shouldFetch ? (
+    <Suspense>
+      <div className="verify-email-container">
+        {verifyEmailQuery.isLoading && <h1>Verifying...</h1>}
+        {verifyEmailQuery.isError && <>{verifyEmailQuery.error.message}</>}
+        {verifyEmailQuery.isSuccess && (
+          <div>
+            <h1>Email verified. Redirecting to main page!</h1>
+          </div>
+        )}
+      </div>
+    </Suspense>
+  ) : (
+    <h1>Invalid token or email</h1>
   );
-};
-
-export default VerifyEmail;
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import apiClient from "@/libs/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -61,73 +61,75 @@ export default function ConfirmForgotPasswordPage() {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div>
-        <p className="mb-5 text-left self-start">Reset your password</p>
-        <form className="w-80 flex flex-col" onSubmit={handleSubmit}>
-          <TextField
-            label="New Password"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FaLock />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-              style: {
+    <Suspense>
+      <div className="flex flex-col items-center">
+        <div>
+          <p className="mb-5 text-left self-start">Reset your password</p>
+          <form className="w-80 flex flex-col" onSubmit={handleSubmit}>
+            <TextField
+              label="New Password"
+              type={showPassword ? "text" : "password"}
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FaLock />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                style: {
+                  borderRadius: "27px",
+                },
+              }}
+            />
+            <TextField
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start"></InputAdornment>
+                ),
+                style: {
+                  borderRadius: "27px",
+                },
+              }}
+            />
+            {error && <p className="text-red-600">{error}</p>}
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                backgroundColor: "#8B8CBAFC",
                 borderRadius: "27px",
-              },
-            }}
-          />
-          <TextField
-            label="Confirm Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start"></InputAdornment>
-              ),
-              style: {
-                borderRadius: "27px",
-              },
-            }}
-          />
-          {error && <p className="text-red-600">{error}</p>}
-          <Button
-            type="submit"
-            variant="contained"
-            style={{
-              backgroundColor: "#8B8CBAFC",
-              borderRadius: "27px",
-              width: "50%",
-              alignSelf: "center",
-            }}
-          >
-            Reset Password
-          </Button>
-        </form>
-        <div className="flex justify-center pt-5 pb-0">
-          <Link href="/auth/sign-up">
-            <p className="text-blue-600">Back to sign up</p>
-          </Link>
+                width: "50%",
+                alignSelf: "center",
+              }}
+            >
+              Reset Password
+            </Button>
+          </form>
+          <div className="flex justify-center pt-5 pb-0">
+            <Link href="/auth/sign-up">
+              <p className="text-blue-600">Back to sign up</p>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

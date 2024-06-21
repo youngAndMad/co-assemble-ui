@@ -224,7 +224,7 @@ export default function SignUp() {
               cursor: signUpMutation.isPending ? "not-allowed" : "pointer",
             }}
           >
-            Sign In!
+            Sign Up!
           </Link>
         </p>
       </div>
