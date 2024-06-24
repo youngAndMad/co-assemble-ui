@@ -6,7 +6,7 @@ on:
     types:
       - completed
     branches:
-      - 'master' # todo change to test after creating prod env
+      - "master" # todo change to test after creating prod env
 
 jobs:
   build-docker-image:
@@ -20,10 +20,10 @@ jobs:
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker image
-        run: docker build -t daneker/co-assemble-ui .
+        run: docker build -t daneker/Coassemble-ui .
 
       - name: Push Docker image
-        run: docker push daneker/co-assemble-ui
+        run: docker push daneker/Coassemble-ui
   deploy-to-server:
     runs-on: ubuntu-latest
     needs: build-docker-image
@@ -37,6 +37,6 @@ jobs:
           port: 22
           script: |
             cd coassemble/test
-            sudo docker rmi -f daneker/co-assemble-ui
+            sudo docker rmi -f daneker/Coassemble-ui
             sudo docker compose down -v
             sudo docker compose up -d

@@ -1,22 +1,22 @@
 FROM node:lts as dependencies
-WORKDIR /co-assemble-ui
+WORKDIR /coassemble-ui
 COPY package.json package-lock.json ./
 RUN npm install --frozen-lockfile
 
 FROM node:lts as builder
-WORKDIR /co-assemble-ui
+WORKDIR /coassemble-ui
 COPY . .
-COPY --from=dependencies /co-assemble-ui/node_modules ./node_modules
+COPY --from=dependencies /coassemble-ui/node_modules ./node_modules
 RUN npm run build
 
 FROM node:lts as runner
-WORKDIR /co-assemble-ui
+WORKDIR /coassemble-ui
 ENV NODE_ENV production
 
-COPY --from=builder /co-assemble-ui/public ./public
-COPY --from=builder /co-assemble-ui/package.json ./package.json
-COPY --from=builder /co-assemble-ui/.next ./.next
-COPY --from=builder /co-assemble-ui/node_modules ./node_modules
+COPY --from=builder /coassemble-ui/public ./public
+COPY --from=builder /coassemble-ui/package.json ./package.json
+COPY --from=builder /coassemble-ui/.next ./.next
+COPY --from=builder /coassemble-ui/node_modules ./node_modules
 
 COPY nginx-default.conf /etc/nginx/conf.d/default.conf
 

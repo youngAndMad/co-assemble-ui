@@ -79,7 +79,7 @@ export default function SignUp() {
   return (
     <div className="flex flex-col items-center">
       <div>
-        <p className="mb-5 text-left self-start">Sign up to Co-assemble</p>
+        <p className="mb-5 text-left self-start">Sign up to Coassemble</p>
         <form
           className="w-80 flex flex-col"
           onSubmit={handleSubmit(handleSignUp)}
